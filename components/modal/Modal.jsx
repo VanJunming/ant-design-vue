@@ -135,7 +135,7 @@ export default {
       this.$emit('ok', e);
     },
     renderFooter(locale) {
-      const { okType, confirmLoading } = this;
+      const { okType, confirmLoading, $slots } = this;
       const cancelBtnProps = mergeProps(
         { on: { click: this.handleCancel } },
         this.cancelButtonProps || {},
@@ -150,14 +150,23 @@ export default {
         },
         this.okButtonProps || {},
       );
-      return (
-        <div>
-          <Button {...cancelBtnProps}>
-            {getComponentFromProp(this, 'cancelText') || locale.cancelText}
-          </Button>
-          <Button {...okBtnProps}>{getComponentFromProp(this, 'okText') || locale.okText}</Button>
-        </div>
-      );
+      const footerSlots = $slots.footer;
+      if (footerSlots) {
+        return (
+          <div>
+            { footerSlots }
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <Button {...cancelBtnProps}>
+              {getComponentFromProp(this, 'cancelText') || locale.cancelText}
+            </Button>
+            <Button {...okBtnProps}>{getComponentFromProp(this, 'okText') || locale.okText}</Button>
+          </div>
+        );
+      }
     },
   },
 
